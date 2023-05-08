@@ -1,0 +1,72 @@
+extends layout.pug
+
+block content
+    h1 Contact List
+    table
+        thead
+            tr
+                th Name
+                th Phone
+                th Email
+                th Address
+                th Contact
+        tbody#Contacts
+            each contact in contacts
+                tr
+                    td
+                        section
+                            a(href='/'+contact.id)= contact.first +' '+ contact.last
+                    td
+                        section= contact.phone
+                    td= contact.email
+                    td= contact.address
+                    td
+                        section
+                            if(contact.contact_by_phone==='on')
+                                input(id='phone', type='checkbox' disabled checked)
+                            else
+                                input(id='phone', type='checkbox' disabled)
+                            label(for='phone') Phone
+                        section
+                            if(contact.contact_by_email === 'on')
+                                input(id='email', type='checkbox' disabled checked)
+                            else
+                                input(id='email', type='checkbox' disabled)
+                            label(for='email') Email
+                        section
+                            if(contact.contact_by_mail === 'on')
+                                input(id='mail', type='checkbox' disabled checked)
+                            else
+                                input(id='mail', type='checkbox' disabled)
+                            label(for='mail') Mail
+    form
+        fieldset
+            legend Basic Info
+            section
+                label(for='first') First Name:
+                input(name="first", required=true)
+            section
+                label(for='last') Last Name:
+                input(name="last", required=true)
+            section
+                label(for='phone') Phone:
+                input(type="tel", name="phone", required=true)
+            section
+                label(for='email') Email:
+                input(type='email', name="email", required=true)
+            section
+                label(for='address') Address:
+                input(type='address', name='address', required=true)
+
+        fieldset
+            legend Contact Preferences
+            section
+                input(type="checkbox", name="contact_by_phone")
+                label(for="contact_by_phone") Contact by phone
+            section
+                input(type="checkbox", name="contact_by_email")
+                label(for="contact_by_email") Contact by email
+            section
+                input(type="checkbox", name="contact_by_mail")
+                label(for="contact_by_mail") Contact by mail
+        button(type='button', onclick='addContact()') Create
