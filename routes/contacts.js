@@ -3,9 +3,15 @@ const router = express.Router();
 const geo = require('node-geocoder');
 const geocoder = geo({ provider: 'openstreetmap' });
 
+const logged_in = (req,res,next) => {
+    if(req.secret.user)
+        next();
+    else
+        res.status(401).send("Not authorized");
+}
 router.get('/',async (req, res) => {
     const contacts = await req.db.getAllContacts();
-    res.render('start', {contacts:contacts});
+    res.render('start', {contacts:contacts, user: req.session.user});
 });
 
 
@@ -60,13 +66,13 @@ router.delete('/contacts/:id', async (req, res) => {
     res.status(200).send();
 });
 
-router.get('/contacts/:id/edit', async (req, res) => {
+router.get('/contacts/:id/edit',logged_in, async (req, res) => {
     const id = req.params.id;
     const contact = await req.db.getContact(parseInt(id));
-    res.render('edit',{contact:contact[0]});
+    res.render('edit',{contact:contact[0], user: req.session.user});
 });
 
-router.post('/contacts/:id/edit', async (req, res) => {
+router.post('/contacts/:id/edit',logged_in, async (req, res) => {
     console.log("edit contact");
     await req.db.updateContact(req.body,req.params.id);
     res.redirect('/');

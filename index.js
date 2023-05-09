@@ -1,6 +1,8 @@
 const pug = require('pug');
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -18,9 +20,18 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(session({
+    secret: 'cmps369',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
+
 app.get('/favicon.ico',(req, res) => {
     res.status(404).send("404 error");
 });
+
+app.use('/users',require('./routes/users'));
 
 app.use('/',require('./routes/contacts'));
 

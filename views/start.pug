@@ -18,7 +18,7 @@ block content
     div#map-container
         div#map
 
-    form.form-control.bg-light
+    form.form-control.bg-light.mb-3
         fieldset
             legend Basic Info
             .row
@@ -58,6 +58,7 @@ block content
             .col-3
                 button.btn.btn-primary(type='button', onclick='addContact()') Create
             .col#message
+        .mb-3
     script(src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js")
     script(src="/contacts.js")
     script.

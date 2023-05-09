@@ -1,0 +1,30 @@
+extends layout.pug
+
+block content
+    h1.mt-2 Sign up
+    h5.text-secondary Please enter a username and password
+    form.form-control.bg-light(action="/users/signup", method="POST")
+        section.mt-1
+            label.form-label(for="first") First Name
+            input.form-control(name="first" required=true)
+        section
+            label.form-label(for="last") Last Name
+            input.form-control(name="last" required=true)
+        br
+        section
+            label.form-label(for="username") Username
+            input.form-control(name="username" required=true)
+        section
+            label.form-label(for="password") Password
+            input.form-control(name="password", type="password" required=true)
+        section
+            label.form-label(for="password2") Confirm Password
+            input.form-control(name="password2", type="password" required=true)
+        br
+        button.btn.btn-primary(type="submit") Sign up
+        a.ms-2(href="/") Nevermind
+    if message
+        p.alert.alert-warning #{message}
+    section
+        p.mt-1.ms-3 Already have an account?
+            a.ms-2(href="/users/login") Sign in here!

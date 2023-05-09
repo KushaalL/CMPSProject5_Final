@@ -1,0 +1,18 @@
+extends layout.pug
+
+block content
+    h1 Sign in
+    form.form-control.bg-light(action="/users/login", method="POST")
+        section
+            label.form-label.mt-1(for="username") Username
+            input.form-control(name="username", required=true)
+        section
+            label.form-label.mt-1(for="password") Password
+            input.form-control(name="password", type="password", required=true)
+        button.btn.btn-primary.mt-2.mb-2(type='submit') Sign in
+        a.ms-2(href="/") Nevermind
+    if message
+        p.alert.alert-warning #{message}
+    section
+        p.mt-1.ms-3 Don't have an account yet?
+            a.ms-2(href="/users/signup") Sign up here!
