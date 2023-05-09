@@ -11,9 +11,22 @@ const addContact = async () => {
     const phone = document.querySelector("#phoneC").value;
     const email = document.querySelector("#emailC").value;
     const address = document.querySelector("#addressC").value;
-    const contactPhone = document.querySelector("#contactPhoneC").value;
-    const contactEmail = document.querySelector("#contactEmailC").value;
-    const contactMail = document.querySelector("#contactMailC").value;
+    let contactPhone = document.querySelector("#contactPhoneC").checked;
+    if(contactPhone)
+        contactPhone = "on";
+    else
+        contactPhone = "off";
+    let contactEmail = document.querySelector("#contactEmailC").checked;
+    if(contactEmail)
+        contactEmail = "on";
+    else
+        contactEmail = "off";
+    let contactMail = document.querySelector("#contactMailC").checked;
+    if(contactMail)
+        contactMail = "on";
+    else
+        contactMail = "off";
+    console.log(fName, lName, phone, email, address, contactPhone, contactEmail, contactMail);
 
     const response = await axios.put('/create', {
         fName: fName,
@@ -27,39 +40,89 @@ const addContact = async () => {
 
     if(!response.error)
     {
-        const contactTable = document.querySelector("#contacts");
+        loadContacts();
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        loadPlaces();
+    }
+}
+const loadContacts = async () => {
+    const response = await axios.get('/contacts');
+    const contactTable = document.querySelector("#contacts");
+    while(contactTable.firstChild)
+        contactTable.removeChild(contactTable.firstChild);
+    const contacts = response.data.contacts;
+    for(let i = 0;i<contacts.length;i++)
+    {
+        const address = contacts[i].address.split(",");
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>
                 <section>
-                    <a href="/contact/${response.data.id}">${fName} ${lName}</a>
+                    ${contacts[i].first} ${contacts[i].last}
                 </section>
             </td>
-            <td>${phone}</td>
-            <td>${email}</td>
-            <td>${response.data.formalAddress}</td>
+            <td>${contacts[i].phone}</td>
+            <td>${contacts[i].email}</td>
+            <td>
+                <section>${address[0]} ${address[1]}</section>
+                <section>
+                    <span>${address[2]}</span>
+                    <span>, </span>
+                    <span>${address[3]}</span>
+                    <span>${address[4]}</span>
+                </section> 
+                <section>${address[5]}</section>
+            </td>
         `;
+        let ed = ""
+        ed += `<td>
+                    <a href="/contacts/${contacts[i].id}/edit" class="btn btn-primary">Edit</a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModalLabel${contacts[i].id}">Delete</button>
+                    
+                    <div class="modal fade" id="deleteModalLabel${contacts[i].id}" tabindex="-1" aria-labelledby="deleteModalLabel${contacts[i].id}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="deleteModalLabel${contacts[i].id}">Delete Contact</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p> Are you sure you want to delete ${contacts[i].first} ${contacts[i].last}?</p> 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteContact(${contacts[i].id})"> Yes!</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </td>`;
+
         let s = ``;
         s+= `<td> <section>`;
-        if(contactPhone)
+        if(contacts[i].contact_by_phone === "on")
             s+= `<input id="phone" type="checkbox" checked disabled>`;
         else
             s+= `<input id="phone" type="checkbox" disabled>`;
 
         s+= `<label for="phone">Phone</label></section><section>`;
 
-        if(contactEmail)
+        if(contacts[i].contact_by_email === "on")
             s+= `<input id="email" type="checkbox" checked disabled>`;
         else
             s+= `<input id="email" type="checkbox" disabled>`;
         s+= `<label for="Email">Email</label></section><section>`;
 
-        if(contactMail)
+        if(contacts[i].contact_by_mail === "on")
             s+= `<input id="mail" type="checkbox" checked disabled>`;
         else
             s+= `<input id="mail" type="checkbox" disabled>`;
         s+= `<label for="mail">Mail</label></section></td>`;
-        tr.innerHTML+=s;
+        tr.innerHTML+=s+ed;
+
+        tr.dataset.lat = contacts[i].lat;
+        tr.dataset.lng = contacts[i].lng;
+        tr.onclick = on_row_click;
         contactTable.appendChild(tr);
     }
 }
@@ -74,4 +137,25 @@ const loadPlaces = async () => {
             .bindPopup(`<b>${response.data.contacts[i].first} ${response.data.contacts[i].last}</b><br/>${response.data.contacts[i].address}`);
         markers.push(marker);
     }
+}
+
+const on_row_click = (e) => {
+    let row = e.target;
+
+    if (e.target.tagName.toUpperCase() === 'TD')
+        row = e.target.parentNode;
+
+    const lat = row.dataset.lat;
+    const lng = row.dataset.lng;
+    console.log(lat, lng)
+    map.flyTo([lat, lng]);
+}
+
+const deleteContact = async (id) => {
+    await axios.delete(`/contacts/${id}`);
+    for (let i = 0; i < markers.length; i++) {
+        map.removeLayer(markers[i]);
+    }
+    await loadContacts();
+    await loadPlaces();
 }

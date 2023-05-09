@@ -11,8 +11,10 @@ router.get('/',async (req, res) => {
 
 router.put('/create', async (req, res) => {
     const result = await geocoder.geocode(req.body.address);
+    console.log(result.length)
     if(result.length>0)
     {
+        console.log(req.body.fName);
         const info = {
             first: req.body.fName,
             last: req.body.lName,
@@ -44,6 +46,23 @@ router.put('/create', async (req, res) => {
 router.get('/contacts', async (req, res) => {
     const contacts = await req.db.getAllContacts();
     res.json({ contacts: contacts });
+});
+
+router.delete('/contacts/:id', async (req, res) => {
+    await req.db.deleteContact(req.params.id);
+    res.status(200).send();
+});
+
+router.get('/contacts/:id/edit', async (req, res) => {
+    const id = req.params.id;
+    const contact = await req.db.getContact(parseInt(id));
+    res.render('edit',{contact:contact[0]});
+});
+
+router.post('/contacts/:id/edit', async (req, res) => {
+    console.log("edit contact");
+    await req.db.updateContact(req.body,req.params.id);
+    res.redirect('/');
 });
 
 module.exports = router;

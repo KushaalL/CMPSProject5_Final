@@ -2,78 +2,61 @@ extends layout.pug
 
 block content
     h1 Contact List
-    table
-        thead
-            tr
-                th Name
-                th Phone
-                th Email
-                th Address
-                th Contact
-        tbody#contacts
-            each contact in contacts
+    div.table-responsive
+        table.table.table-hover
+            thead
                 tr
-                    td
-                        section
-                            a(href='/'+contact.id)= contact.first +' '+ contact.last
-                    td
-                        section= contact.phone
-                    td= contact.email
-                    td= contact.address
-                    td
-                        section
-                            if(contact.contact_by_phone==='on')
-                                input(id='phone', type='checkbox' disabled checked)
-                            else
-                                input(id='phone', type='checkbox' disabled)
-                            label(for='phone') Phone
-                        section
-                            if(contact.contact_by_email === 'on')
-                                input(id='email', type='checkbox' disabled checked)
-                            else
-                                input(id='email', type='checkbox' disabled)
-                            label(for='email') Email
-                        section
-                            if(contact.contact_by_mail === 'on')
-                                input(id='mail', type='checkbox' disabled checked)
-                            else
-                                input(id='mail', type='checkbox' disabled)
-                            label(for='mail') Mail
+                    th Name
+                    th Phone
+                    th Email
+                    th Address
+                    th Contact
+                    th Edit/Delete
+            tbody#contacts
+
+
     div#map-container
         div#map
 
-    form
+    form.form-control.bg-light
         fieldset
             legend Basic Info
+            .row
+                .col-12.col-md-6
+                    section
+                        label.form-label(for='first') First Name:
+                        input.form-control#fNameC(name="first", required=true)
+                .col-12.col-md-6
+                    section
+                        label.form-label(for='last') Last Name:
+                        input.form-control#lNameC(name="last", required=true)
+            .row
+                .col-12.col-md-6
+                    section
+                        label.form-label(for='phone') Phone:
+                        input.form-control#phoneC(type="tel", name="phone", required=true)
+                .col-12.col-md-6
+                    section
+                        label.form-label(for='email') Email:
+                        input.form-control#emailC(type='email', name="email", required=true)
             section
-                label(for='first') First Name:
-                input#fNameC(name="first", required=true)
-            section
-                label(for='last') Last Name:
-                input#lNameC(name="last", required=true)
-            section
-                label(for='phone') Phone:
-                input#phoneC(type="tel", name="phone", required=true)
-            section
-                label(for='email') Email:
-                input#emailC(type='email', name="email", required=true)
-            section
-                label(for='address') Address:
-                input#addressC(type='address', name='address', required=true)
+                label.form-label(for='address') Address:
+                input.form-control#addressC(type='address', name='address', required=true)
 
         fieldset
-            legend Contact Preferences
+            legend.mt-3 Contact Preferences
             section
-                input#contactPhoneC(type="checkbox", name="contact_by_phone")
-                label(for="contact_by_phone") Contact by phone
+                input.form-check-input#contactPhoneC(type="checkbox", name="contact_by_phone")
+                label.form-label.ms-1(for="contact_by_phone") Contact by phone
             section
-                input#contactEmailC(type="checkbox", name="contact_by_email")
-                label(for="contact_by_email") Contact by email
+                input.form-check-input#contactEmailC(type="checkbox", name="contact_by_email")
+                label.form-label.ms-1(for="contact_by_email") Contact by email
             section
-                input#contactMailC(type="checkbox", name="contact_by_mail")
-                label(for="contact_by_mail") Contact by mail
-        button(type='button', onclick='addContact()') Create
+                input.form-check-input#contactMailC(type="checkbox", name="contact_by_mail")
+                label.form-label.ms-1(for="contact_by_mail") Contact by mail
+        button.btn.btn-primary(type='button', onclick='addContact()') Create
     script(src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js")
     script(src="/contacts.js")
     script.
+        loadContacts()
         loadPlaces()
