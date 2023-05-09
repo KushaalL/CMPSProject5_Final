@@ -18,6 +18,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/favicon.ico',(req, res) => {
+    res.status(404).send("404 error");
+});
+
 app.use('/',require('./routes/contacts'));
 
 

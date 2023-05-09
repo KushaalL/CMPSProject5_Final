@@ -10,7 +10,7 @@ block content
                 th Email
                 th Address
                 th Contact
-        tbody#Contacts
+        tbody#contacts
             each contact in contacts
                 tr
                     td
@@ -39,34 +39,41 @@ block content
                             else
                                 input(id='mail', type='checkbox' disabled)
                             label(for='mail') Mail
+    div#map-container
+        div#map
+
     form
         fieldset
             legend Basic Info
             section
                 label(for='first') First Name:
-                input(name="first", required=true)
+                input#fNameC(name="first", required=true)
             section
                 label(for='last') Last Name:
-                input(name="last", required=true)
+                input#lNameC(name="last", required=true)
             section
                 label(for='phone') Phone:
-                input(type="tel", name="phone", required=true)
+                input#phoneC(type="tel", name="phone", required=true)
             section
                 label(for='email') Email:
-                input(type='email', name="email", required=true)
+                input#emailC(type='email', name="email", required=true)
             section
                 label(for='address') Address:
-                input(type='address', name='address', required=true)
+                input#addressC(type='address', name='address', required=true)
 
         fieldset
             legend Contact Preferences
             section
-                input(type="checkbox", name="contact_by_phone")
+                input#contactPhoneC(type="checkbox", name="contact_by_phone")
                 label(for="contact_by_phone") Contact by phone
             section
-                input(type="checkbox", name="contact_by_email")
+                input#contactEmailC(type="checkbox", name="contact_by_email")
                 label(for="contact_by_email") Contact by email
             section
-                input(type="checkbox", name="contact_by_mail")
+                input#contactMailC(type="checkbox", name="contact_by_mail")
                 label(for="contact_by_mail") Contact by mail
         button(type='button', onclick='addContact()') Create
+    script(src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js")
+    script(src="/contacts.js")
+    script.
+        loadPlaces()
