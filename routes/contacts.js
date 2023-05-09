@@ -12,7 +12,7 @@ router.get('/',async (req, res) => {
 router.put('/create', async (req, res) => {
     const result = await geocoder.geocode(req.body.address);
     console.log(result.length)
-    if(result.length>0)
+    if(result.length===1)
     {
         console.log(req.body.fName);
         const info = {
@@ -35,12 +35,19 @@ router.put('/create', async (req, res) => {
             formalAddress: result[0].formattedAddress,
         });
     }
-    else
+    else if(result.length===0)
     {
         res.json({
             error:'No address was found'
         })
     }
+    else
+    {
+        res.json({
+            error:'Address was not specific enough'
+        })
+    }
+
 });
 
 router.get('/contacts', async (req, res) => {

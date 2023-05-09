@@ -54,7 +54,10 @@ block content
             section
                 input.form-check-input#contactMailC(type="checkbox", name="contact_by_mail")
                 label.form-label.ms-1(for="contact_by_mail") Contact by mail
-        button.btn.btn-primary(type='button', onclick='addContact()') Create
+        .row
+            .col-3
+                button.btn.btn-primary(type='button', onclick='addContact()') Create
+            .col#message
     script(src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js")
     script(src="/contacts.js")
     script.

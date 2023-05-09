@@ -38,12 +38,26 @@ const addContact = async () => {
         contactEmail: contactEmail,
         contactMail: contactMail});
 
-    if(!response.error)
+    const message = document.querySelector("#message");
+    if(response.data.error)
     {
-        loadContacts();
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
-        loadPlaces();
+        console.log("Error: " + response.data.error);
+        const p = document.createElement('p');
+        p.setAttribute('class',"alert alert-warning")
+        p.innerText = response.data.error;
+        message.appendChild(p);
     }
+    else if(message.childNodes.length>0)
+        message.removeChild(message.firstChild);
+
+    if(message.childNodes.length>1)
+        message.removeChild(message.firstChild);
+    if(!response.data.error) {
+        await loadContacts();
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        await loadPlaces();
+    }
+
 }
 const loadContacts = async () => {
     const response = await axios.get('/contacts');
