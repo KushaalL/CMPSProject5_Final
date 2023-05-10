@@ -67,11 +67,20 @@ block content
         fieldset
             legend Basic Info
             .row
-                .col-12.col-md-6
+                .col-12.col-md-4
+                    label.form-label(for='title') Title:
+                    select.form-select(name='title', required=true)
+                        option selected Choose...
+                        option(value='Mr.') Mr.
+                        option(value='Mrs.') Mrs.
+                        option(value='Ms.') Ms.
+                        option(value = 'Dr.') Dr.
+
+                .col-12.col-md-4
                     section
                         label.form-label(for='first') First Name:
                         input#firstF.form-control(name="first", required=true)
-                .col-12.col-md-6
+                .col-12.col-md-4
                     section
                         label.form-label(for='last') Last Name:
                         input#lastF.form-control(name="last", required=true)

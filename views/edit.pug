@@ -2,45 +2,65 @@ extends layout.pug
 
 block content
     h1 Update Contact Info
-    form.form-control.bg-light(action="/contacts/"+contact.id+"/edit", method="post")
+    form(action="/contacts/"+contact.id+"/edit", method="post").form-control.bg-light
         fieldset
             legend Basic Info
             .row
                 .col-12.col-md-6
                     label.form-label(for='first') First Name:
-                    input.form-control(name="first", value=contact.first, required=true)
+                    input#firstF.form-control(name="first", value=contact.first, required=true)
                 .col-12.col-md-6
                     label.form-label(for='last') Last Name:
-                    input.form-control(name="last", value=contact.last)
+                    input#lastF.form-control(name="last", value=contact.last)
             .row.mt-3
                 .col-12.col-md-6
                     label.form-label(for='phone') Phone:
-                    input.form-control(type="tel", name="phone", value=contact.phone, required=true)
+                    input#phoneF.form-control(type="tel", name="phone", value=contact.phone, required=true)
                 .col-12.col-md-6
                     label.form-label(for='email') Email:
-                    input.form-control(type='email', name="email", value=contact.email, required=true)
-            section
-                label.form-label(for='address') Address:
-                input.form-control(name="address", value=contact.address, required=true)
+                    input#emailF.form-control(type='email', name="email", value=contact.email, required=true)
+        fieldset
+            legend.mt-2 Address
+            .row
+                section.col-12.col-md-6
+                    label.form-label(for='street') Street:
+                    input#streetF.form-control(name='street', required=true, value=contact.street)
+                section.mt-1.col-12.col-md-6
+                    label.form-label(for="city") City:
+                    input#cityF.form-control(name="city" required=true, value=contact.city)
+            .row.mt-1
+                .col-12.col-md-4
+                    label.form-label(for="state") State:
+                    input#stateF.form-control(name="state" required=true, value=contact.state)
+                .col-12.col-md-4
+                    label.form-label(for="zipcode") Zip:
+                    input#zipcodeF.form-control(name="zipcode" required=true, value=contact.zipcode)
+                .col-12.col-md-4
+                    label.form-label(for="country") Country:
+                    input#countryF.form-control(name="country" required=true, value=contact.country)
         fieldset.mt-2
             legend Contact Preferences
             section
                 if contact.contact_by_phone === 'on'
-                    input.form-check-input(type="checkbox", name="contact_by_phone" checked)
+                    input#contactPhoneF.form-check-input(type="checkbox", name="contact_by_phone" checked)
                 else
-                    input.form-check-input(type="checkbox", name="contact_by_phone")
-                label.form-label(for="contact_by_phone") Contact by phone
+                    input#contactPhoneF.form-check-input(type="checkbox", name="contact_by_phone")
+                label.form-label.ps-1(for="contact_by_phone") Contact by phone
             section
                 if contact.contact_by_email === 'on'
-                    input.form-check-input(type="checkbox", name="contact_by_email" checked)
+                    input#contactEmailF.form-check-input(type="checkbox", name="contact_by_email" checked)
                 else
-                    input.form-check-input(type="checkbox", name="contact_by_email")
-                label.form-label(for="contact_by_email") Contact by email
+                    input#contactEmailF.form-check-input(type="checkbox", name="contact_by_email")
+                label.form-label.ps-1(for="contact_by_email") Contact by email
             section
                 if contact.contact_by_mail === 'on'
-                    input.form-check-input(type="checkbox", name="contact_by_mail" checked)
+                    input#contactMailF.form-check-input(type="checkbox", name="contact_by_mail" checked)
                 else
-                    input.form-check-input(type="checkbox", name="contact_by_mail")
-                label.form-label(for="contact_by_mail") Contact by mail
+                    input#contactMailF.form-check-input(type="checkbox", name="contact_by_mail")
+                label.form-label.ps-1(for="contact_by_mail") Contact by mail
         button.btn.btn-primary(type="submit") Save
         a.ms-2(href="/") Cancel
+    if message
+        p.alert.alert-warning #{message}
+    script(src="/contacts.js")
+

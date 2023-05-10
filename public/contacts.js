@@ -5,7 +5,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 const markers = [];
-const addContact = async () => {
+
+const updateContact = async () => {
+    console.log("updating contact");
     const first = document.querySelector("#firstF").value;
     const last = document.querySelector("#lastF").value;
     const phone = document.querySelector("#phoneF").value;
@@ -32,7 +34,69 @@ const addContact = async () => {
         contactMail = "on";
     else
         contactMail = "off";
-    console.log(first,last,phone,email,street,city,state,country,zipcode,contactPhone,contactEmail,contactMail);
+
+    const response = await axios.put('/update', {
+        first: first,
+        last: last,
+        phone: phone,
+        email: email,
+        street: street,
+        city: city,
+        state: state,
+        country: country,
+        zipcode: zipcode,
+        contactPhone: contactPhone,
+        contactEmail: contactEmail,
+        contactMail: contactMail});
+
+    const message = document.querySelector("#message");
+
+    if(response.data.error)
+    {
+        const p = document.createElement('p');
+        p.setAttribute('class',"alert alert-warning")
+        p.innerText = response.data.error;
+        message.appendChild(p);
+    }
+    else if(message.childNodes.length>0)
+        message.removeChild(message.firstChild);
+
+    if(message.childNodes.length>1)
+        message.removeChild(message.firstChild);
+
+    if(!response.data.error)
+    {
+        window.location = "/";
+    }
+}
+const addContact = async () => {
+    console.log("adding contact");
+    const first = document.querySelector("#firstF").value;
+    const last = document.querySelector("#lastF").value;
+    const phone = document.querySelector("#phoneF").value;
+    const email = document.querySelector("#emailF").value;
+    const street = document.querySelector("#streetF").value;
+    const city = document.querySelector("#cityF").value;
+    const state = document.querySelector("#stateF").value;
+    const country = document.querySelector("#countryF").value;
+    const zipcode = document.querySelector("#zipcodeF").value;
+
+    let contactPhone = document.querySelector("#contactPhoneF").checked;
+
+    if(contactPhone)
+        contactPhone = "on";
+    else
+        contactPhone = "off";
+    let contactEmail = document.querySelector("#contactEmailF").checked;
+    if(contactEmail)
+        contactEmail = "on";
+    else
+        contactEmail = "off";
+    let contactMail = document.querySelector("#contactMailF").checked;
+    if(contactMail)
+        contactMail = "on";
+    else
+        contactMail = "off";
 
     const response = await axios.put('/create', {
         first: first,
@@ -50,10 +114,8 @@ const addContact = async () => {
 
     const message = document.querySelector("#message");
 
-    console.log("response:  "+response.data.error);
     if(response.data.error)
     {
-        console.log("Error: " + response.data.error);
         const p = document.createElement('p');
         p.setAttribute('class',"alert alert-warning")
         p.innerText = response.data.error;
