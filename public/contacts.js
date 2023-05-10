@@ -80,8 +80,9 @@ const loadPlaces = async () => {
 
     for(let i=0;i<response.data.contacts.length;i++)
     {
+        const address = response.data.contacts[i].street + ", " + response.data.contacts[i].city + ", " + response.data.contacts[i].state + ", " + response.data.contacts[i].zipcode+", "+response.data.contacts[i].country;
         const marker = L.marker([response.data.contacts[i].lat, response.data.contacts[i].lng]).addTo(map)
-            .bindPopup(`<b>${response.data.contacts[i].first} ${response.data.contacts[i].last}</b><br/>${response.data.contacts[i].address}`);
+            .bindPopup(`<b>${response.data.contacts[i].first} ${response.data.contacts[i].last}</b><br/>${address}`);
         markers.push(marker);
     }
 }
