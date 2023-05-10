@@ -1,7 +1,6 @@
 #map-container {
     position:relative;
     height:700px;
-    margin-bottom:5rem;
 }
 #map {
     position: absolute;

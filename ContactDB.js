@@ -10,6 +10,7 @@ class ContactDB {
 
         await this.db.schema('Contacts',[
             {name: 'id', type: 'INTEGER'},
+            {name: 'title', type: 'TEXT'},
             {name: 'first', type: 'TEXT'},
             {name: 'last', type: 'TEXT'},
             {name: 'phone', type: 'TEXT'},
@@ -34,21 +35,22 @@ class ContactDB {
             {name: 'password', type: 'TEXT'},
         ],'id')
 
-        /*const user = await this.findUserByName('cmps369');
+        const user = await this.findUserByName('cmps369');
         console.log('User: '+user);
         if (user===undefined) {
             console.log('No user of cmps369 in database\nCreating user');
-            const u = {first: 'Scott',last: 'Frees'};
+            const name = {first: 'Scott',last: 'Frees'};
             const bcrypt = require('bcryptjs');
             const salt = bcrypt.genSaltSync(10);
             const hashPass = bcrypt.hashSync('rcnj', salt);
-            //await this.createUser(u, 'cmps369', hashPass);
-        }*/
+            await this.createUser(name, 'cmps369', hashPass);
+        }
     }
 
     async createContact(info)
     {
         return await this.db.create('Contacts',[
+            {column: 'title', value: info.title},
             {column: 'first', value: info.first},
             {column: 'last', value: info.last},
             {column: 'phone', value: info.phone},
@@ -69,6 +71,7 @@ class ContactDB {
     async updateContact(info,id)
     {
         return await this.db.update('Contacts', [
+            {column: 'title', value: info.title},
             {column: 'first', value: info.first},
             {column: 'last', value: info.last},
             {column: 'phone', value: info.phone},

@@ -6,10 +6,30 @@ block content
         fieldset
             legend Basic Info
             .row
-                .col-12.col-md-6
+                .col-12.col-md-2
+                    label.form-label(for='title') Title:
+                    select#titleF.form-select(name='title', required=true)
+                        option(value=contact.title) #{contact.title}
+                        if contact.title === 'Mr.'
+                            option(value='Mrs.') Mrs.
+                            option(value='Ms.') Ms.
+                            option(value ='Dr.') Dr.
+                        else if contact.title === 'Mrs.'
+                            option(value='Mr.') Mr.
+                            option(value='Ms.') Ms.
+                            option(value ='Dr.') Dr.
+                        else if contact.title === 'Ms.'
+                            option(value='Mr.') Mr.
+                            option(value='Mrs.') Mrs.
+                            option(value ='Dr.') Dr.
+                        else if contact.title === 'Dr.'
+                            option(value='Mr.') Mr.
+                            option(value='Mrs.') Mrs.
+                            option(value='Ms.') Ms.
+                .col-12.col-md-5
                     label.form-label(for='first') First Name:
                     input#firstF.form-control(name="first", value=contact.first, required=true)
-                .col-12.col-md-6
+                .col-12.col-md-5
                     label.form-label(for='last') Last Name:
                     input#lastF.form-control(name="last", value=contact.last)
             .row.mt-3

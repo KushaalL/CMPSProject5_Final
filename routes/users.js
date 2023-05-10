@@ -27,7 +27,7 @@ router.post('/signup', async (req,res)=> {
     const username = req.body.username.trim();
     const p1 = req.body.password.trim();
     const p2 = req.body.password2.trim();
-    if(p1!=p2)
+    if(p1!==p2)
     {
         res.render('signup',{hide_login:true,message:'Your passwords do not match'});
         return;
@@ -35,7 +35,7 @@ router.post('/signup', async (req,res)=> {
     const user = await req.db.findUserByName(username);
     if(user)
     {
-        res.render('signup',{hide_login:true,message:'Your username is already in use'});
+        res.render('signup',{hide_login:true,message:'The username is already in use'});
         return;
     }
     const salt = bcrypt.genSaltSync(10);

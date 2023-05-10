@@ -2,85 +2,84 @@ extends layout.pug
 
 block content
     h1 Contact List
-    div.table-responsive
-        table.table.table-hover
-            thead
-                tr
-                    th Name
-                    th Phone
-                    th Email
-                    th Address
-                    th Contact
-                    if user
-                        th Edit/Delete
-            tbody#contacts
-                for contact in contacts
-                    tr(onclick=`on_row_click(${contact.lat}, ${contact.lng})`)
-                        td
-                            section= contact.first +' '+ contact.last
-                        td
-                            section= contact.phone
-                        td= contact.email
-
-                        td
-                            .container
-                                .row
-                                    div= contact.street
-                                .row
-                                    div= contact.city + ', ' + contact.state + ' ' + contact.zipcode
-                                .row
-                                    div= contact.country + ' '+contact.lat+'/'+contact.lng
-                        td
-                            div
-                                if(contact.contact_by_phone==='on')
-                                    input(id='phone', type='checkbox' disabled checked)
-                                else
-                                    input(id='phone', type='checkbox' disabled)
-                                label(for='phone') Phone
-
-                            div
-                                if(contact.contact_by_email === 'on')
-                                    input(id='email', type='checkbox' disabled checked)
-                                else
-                                    input(id='email', type='checkbox' disabled)
-                                label(for='email') Email
-
-                            div
-                                if(contact.contact_by_mail === 'on')
-                                    input(id='mail', type='checkbox' disabled checked)
-                                else
-                                    input(id='mail', type='checkbox' disabled)
-                                label(for='mail') Mail
-
+    div.card
+        div.table-responsive
+            table.table.table-hover
+                thead
+                    tr
+                        th Name
+                        th Phone
+                        th Email
+                        th Address
+                        th Contact
                         if user
+                            th Edit/Delete
+                tbody
+                    for contact in contacts
+                        tr(onclick=`on_row_click(${contact.lat}, ${contact.lng})`)
                             td
-                                section
-                                    a.btn.btn-primary(href='/contacts/'+contact.id+'/edit') Edit
-                                section
-                                    a.btn.btn-danger(href='/contacts/'+contact.id+'/delete') Delete
+                                section= contact.title+contact.first +' '+ contact.last
+                            td
+                                section= contact.phone
+                            td= contact.email
 
+                            td
+                                .container
+                                    .row
+                                        div= contact.street
+                                    .row
+                                        div= contact.city + ', ' + contact.state + ' ' + contact.zipcode
+                                    .row
+                                        div= contact.country + ' '+contact.lat+'/'+contact.lng
+                            td
+                                div
+                                    if(contact.contact_by_phone==='on')
+                                        input(id='phone', type='checkbox' disabled checked)
+                                    else
+                                        input(id='phone', type='checkbox' disabled)
+                                    label(for='phone') Phone
 
-    div#map-container
-        div#map
+                                div
+                                    if(contact.contact_by_email === 'on')
+                                        input(id='email', type='checkbox' disabled checked)
+                                    else
+                                        input(id='email', type='checkbox' disabled)
+                                    label(for='email') Email
 
-    form.form-control.bg-light.mb-3
+                                div
+                                    if(contact.contact_by_mail === 'on')
+                                        input(id='mail', type='checkbox' disabled checked)
+                                    else
+                                        input(id='mail', type='checkbox' disabled)
+                                    label(for='mail') Mail
+
+                            if user
+                                td
+                                    section
+                                        a.btn.btn-primary(href='/contacts/'+contact.id+'/edit') Edit
+                                    section
+                                        a.btn.btn-danger(href='/contacts/'+contact.id+'/delete') Delete
+
+    .card.mt-2
+        div#map-container
+            div#map
+    form.form-control.bg-light.mb-3.mt-2
         fieldset
-            legend Basic Info
+            legend Create Contact
             .row
-                .col-12.col-md-4
+                .col-12.col-md-2
                     label.form-label(for='title') Title:
-                    select.form-select(name='title', required=true)
-                        option selected Choose...
+                    select#titleF.form-select(name='title', required=true)
+                        option Choose Title
                         option(value='Mr.') Mr.
                         option(value='Mrs.') Mrs.
                         option(value='Ms.') Ms.
-                        option(value = 'Dr.') Dr.
-
-                .col-12.col-md-4
+                        option(value ='Dr.') Dr.
+                .col-12.col-md-5
                     section
                         label.form-label(for='first') First Name:
                         input#firstF.form-control(name="first", required=true)
-                .col-12.col-md-4
+                .col-12.col-md-5
                     section
                         label.form-label(for='last') Last Name:
                         input#lastF.form-control(name="last", required=true)
@@ -94,7 +93,7 @@ block content
                         label.form-label(for='email') Email:
                         input#emailF.form-control(type='email', name="email", required=true)
         fieldset
-            legend.mt-2 Address
+            //legend.mt-2 Address
             .row
                 section.col-12.col-md-6
                     label.form-label(for='street') Street:
@@ -114,7 +113,7 @@ block content
                     input#countryF.form-control(name="country" required=true)
 
         fieldset
-            legend.mt-3 Contact Preferences
+            //legend.mt-3 Contact Preferences
             section
                 input#contactPhoneF.form-check-input(type="checkbox", name="contact_by_phone")
                 label.form-label.ms-1(for="contact_by_phone") Contact by phone
