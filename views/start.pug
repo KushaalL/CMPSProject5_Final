@@ -11,8 +11,53 @@ block content
                     th Email
                     th Address
                     th Contact
-                    th Edit/Delete
+                    if user
+                        th Edit/Delete
             tbody#contacts
+                for contact in contacts
+                    tr(onclick=`on_row_click(${contact.lat}, ${contact.lng})`)
+                        td
+                            section= contact.first +' '+ contact.last
+                        td
+                            section= contact.phone
+                        td= contact.email
+
+                        td
+                            .container
+                                .row
+                                    div= contact.street
+                                .row
+                                    div= contact.city + ', ' + contact.state + ' ' + contact.zipcode
+                                .row
+                                    div= contact.country + ' '+contact.lat+'/'+contact.lng
+                        td
+                            div
+                                if(contact.contact_by_phone==='on')
+                                    input(id='phone', type='checkbox' disabled checked)
+                                else
+                                    input(id='phone', type='checkbox' disabled)
+                                label(for='phone') Phone
+
+                            div
+                                if(contact.contact_by_email === 'on')
+                                    input(id='email', type='checkbox' disabled checked)
+                                else
+                                    input(id='email', type='checkbox' disabled)
+                                label(for='email') Email
+
+                            div
+                                if(contact.contact_by_mail === 'on')
+                                    input(id='mail', type='checkbox' disabled checked)
+                                else
+                                    input(id='mail', type='checkbox' disabled)
+                                label(for='mail') Mail
+
+                        if user
+                            td
+                                section
+                                    a.btn.btn-primary(href='/contacts/'+contact.id+'/edit') Edit
+                                section
+                                    a.btn.btn-danger(href='/contacts/'+contact.id+'/delete') Delete
 
 
     div#map-container
@@ -25,34 +70,50 @@ block content
                 .col-12.col-md-6
                     section
                         label.form-label(for='first') First Name:
-                        input.form-control#fNameC(name="first", required=true)
+                        input#firstF.form-control(name="first", required=true)
                 .col-12.col-md-6
                     section
                         label.form-label(for='last') Last Name:
-                        input.form-control#lNameC(name="last", required=true)
+                        input#lastF.form-control(name="last", required=true)
             .row
                 .col-12.col-md-6
                     section
                         label.form-label(for='phone') Phone:
-                        input.form-control#phoneC(type="tel", name="phone", required=true)
+                        input#phoneF.form-control(type="tel", name="phone", required=true)
                 .col-12.col-md-6
                     section
                         label.form-label(for='email') Email:
-                        input.form-control#emailC(type='email', name="email", required=true)
-            section
-                label.form-label(for='address') Address:
-                input.form-control#addressC(type='address', name='address', required=true)
+                        input#emailF.form-control(type='email', name="email", required=true)
+        fieldset
+            legend.mt-2 Address
+            .row
+                section.col-12.col-md-6
+                    label.form-label(for='street') Street:
+                    input#streetF.form-control(type='street', name='address', required=true)
+                section.mt-1.col-12.col-md-6
+                    label.form-label(for="city") City:
+                    input#cityF.form-control(name="city" required=true)
+            .row.mt-1
+                .col-12.col-md-4
+                    label.form-label(for="state") State:
+                    input#stateF.form-control(name="state" required=true)
+                .col-12.col-md-4
+                    label.form-label(for="zip") Zip:
+                    input#zipcodeF.form-control(name="zip" required=true)
+                .col-12.col-md-4
+                    label.form-label(for="country") Country:
+                    input#countryF.form-control(name="country" required=true)
 
         fieldset
             legend.mt-3 Contact Preferences
             section
-                input.form-check-input#contactPhoneC(type="checkbox", name="contact_by_phone")
+                input#contactPhoneF.form-check-input(type="checkbox", name="contact_by_phone")
                 label.form-label.ms-1(for="contact_by_phone") Contact by phone
             section
-                input.form-check-input#contactEmailC(type="checkbox", name="contact_by_email")
+                input#contactEmailF.form-check-input(type="checkbox", name="contact_by_email")
                 label.form-label.ms-1(for="contact_by_email") Contact by email
             section
-                input.form-check-input#contactMailC(type="checkbox", name="contact_by_mail")
+                input#contactMailF.form-check-input(type="checkbox", name="contact_by_mail")
                 label.form-label.ms-1(for="contact_by_mail") Contact by mail
         .row
             .col-3
@@ -62,5 +123,4 @@ block content
     script(src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js")
     script(src="/contacts.js")
     script.
-        loadContacts()
         loadPlaces()

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="contacts" uuid="3b6c6d6f-2cf6-4271-ace5-540afa6da9e3">
+    <data-source source="LOCAL" name="contacts" uuid="8830cf06-ed8c-44bf-8cf1-d680154454cb">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\Kushaal Latupalli\Computer Science\Javascript\Project5_Final\contacts.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\Kushaal Latupalli\Computer Science\Javascript\CMPSProject5_Final\contacts.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

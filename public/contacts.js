@@ -6,39 +6,51 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const markers = [];
 const addContact = async () => {
-    const fName = document.querySelector("#fNameC").value;
-    const lName = document.querySelector("#lNameC").value;
-    const phone = document.querySelector("#phoneC").value;
-    const email = document.querySelector("#emailC").value;
-    const address = document.querySelector("#addressC").value;
-    let contactPhone = document.querySelector("#contactPhoneC").checked;
+    const first = document.querySelector("#firstF").value;
+    const last = document.querySelector("#lastF").value;
+    const phone = document.querySelector("#phoneF").value;
+    const email = document.querySelector("#emailF").value;
+    const street = document.querySelector("#streetF").value;
+    const city = document.querySelector("#cityF").value;
+    const state = document.querySelector("#stateF").value;
+    const country = document.querySelector("#countryF").value;
+    const zipcode = document.querySelector("#zipcodeF").value;
+
+    let contactPhone = document.querySelector("#contactPhoneF").checked;
+
     if(contactPhone)
         contactPhone = "on";
     else
         contactPhone = "off";
-    let contactEmail = document.querySelector("#contactEmailC").checked;
+    let contactEmail = document.querySelector("#contactEmailF").checked;
     if(contactEmail)
         contactEmail = "on";
     else
         contactEmail = "off";
-    let contactMail = document.querySelector("#contactMailC").checked;
+    let contactMail = document.querySelector("#contactMailF").checked;
     if(contactMail)
         contactMail = "on";
     else
         contactMail = "off";
-    console.log(fName, lName, phone, email, address, contactPhone, contactEmail, contactMail);
+    console.log(first,last,phone,email,street,city,state,country,zipcode,contactPhone,contactEmail,contactMail);
 
     const response = await axios.put('/create', {
-        fName: fName,
-        lName: lName,
+        first: first,
+        last: last,
         phone: phone,
         email: email,
-        address: address,
+        street: street,
+        city: city,
+        state: state,
+        country: country,
+        zipcode: zipcode,
         contactPhone: contactPhone,
         contactEmail: contactEmail,
         contactMail: contactMail});
 
     const message = document.querySelector("#message");
+
+    console.log("response:  "+response.data.error);
     if(response.data.error)
     {
         console.log("Error: " + response.data.error);
@@ -52,13 +64,31 @@ const addContact = async () => {
 
     if(message.childNodes.length>1)
         message.removeChild(message.firstChild);
-    if(!response.data.error) {
-        await loadContacts();
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
-        await loadPlaces();
-    }
 
+    if(!response.data.error)
+    {
+        window.location = "/";
+    }
 }
+
+const loadPlaces = async () => {
+    const response = await axios.get('/contacts');
+    console.log("response",response.data);
+    console.log("lat",response.data.contacts[0].lat);
+    for(let i=0;i<response.data.contacts.length;i++)
+    {
+        const marker = L.marker([response.data.contacts[i].lat, response.data.contacts[i].lng]).addTo(map)
+            .bindPopup(`<b>${response.data.contacts[i].first} ${response.data.contacts[i].last}</b><br/>${response.data.contacts[i].address}`);
+        markers.push(marker);
+    }
+}
+
+const on_row_click = (lat, lng) => {
+    console.log(lat, lng)
+    map.flyTo([lat, lng]);
+}
+
+/*
 const loadContacts = async () => {
     const response = await axios.get('/contacts');
     const contactTable = document.querySelector("#contacts");
@@ -84,7 +114,7 @@ const loadContacts = async () => {
                     <span>, </span>
                     <span>${address[3]}</span>
                     <span>${address[4]}</span>
-                </section> 
+                </section>
                 <section>${address[5]}</section>
             </td>
         `;
@@ -92,7 +122,7 @@ const loadContacts = async () => {
         ed += `<td>
                     <a href="/contacts/${contacts[i].id}/edit" class="btn btn-primary">Edit</a>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModalLabel${contacts[i].id}">Delete</button>
-                    
+
                     <div class="modal fade" id="deleteModalLabel${contacts[i].id}" tabindex="-1" aria-labelledby="deleteModalLabel${contacts[i].id}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -101,7 +131,7 @@ const loadContacts = async () => {
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p> Are you sure you want to delete ${contacts[i].first} ${contacts[i].last}?</p> 
+                                    <p> Are you sure you want to delete ${contacts[i].first} ${contacts[i].last}?</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteContact(${contacts[i].id})"> Yes!</button>
@@ -140,36 +170,4 @@ const loadContacts = async () => {
         contactTable.appendChild(tr);
     }
 }
-
-const loadPlaces = async () => {
-    const response = await axios.get('/contacts');
-    console.log("response",response.data);
-    console.log("lat",response.data.contacts[0].lat);
-    for(let i=0;i<response.data.contacts.length;i++)
-    {
-        const marker = L.marker([response.data.contacts[i].lat, response.data.contacts[i].lng]).addTo(map)
-            .bindPopup(`<b>${response.data.contacts[i].first} ${response.data.contacts[i].last}</b><br/>${response.data.contacts[i].address}`);
-        markers.push(marker);
-    }
-}
-
-const on_row_click = (e) => {
-    let row = e.target;
-
-    if (e.target.tagName.toUpperCase() === 'TD')
-        row = e.target.parentNode;
-
-    const lat = row.dataset.lat;
-    const lng = row.dataset.lng;
-    console.log(lat, lng)
-    map.flyTo([lat, lng]);
-}
-
-const deleteContact = async (id) => {
-    await axios.delete(`/contacts/${id}`);
-    for (let i = 0; i < markers.length; i++) {
-        map.removeLayer(markers[i]);
-    }
-    await loadContacts();
-    await loadPlaces();
-}
+ */
